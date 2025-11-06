@@ -1,12 +1,35 @@
-import express from 'express';
-import 'dotenv/config';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import { connectDB } from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import cookieParser from "cookie-parser";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
+dotenv.config();
+connectDB();
 
-import connectDB from './config/db.js';
-const app = express()
+const app = express();
+app.use(express.json());
+
+app.use(cors());
+app.use(cookieParser());
+
+ 
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/analytics", analyticsRoutes);
+
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  const status = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(status).json({ message: err.message });
+});
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-    connectDB()
-    console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
