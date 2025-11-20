@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://ecom-topaz-psi-54.vercel.app"],
     credentials: true,
   })
 );
