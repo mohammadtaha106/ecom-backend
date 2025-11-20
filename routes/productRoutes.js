@@ -1,5 +1,5 @@
 
-import { createProduct, deleteProduct, getAllProducts, getFeaturedProducts, getRecommendedProducts } from "../controllers/productController.js";
+import { createProduct, deleteProduct, getAllProducts, getFeaturedProducts, getProductsByCategory, getRecommendedProducts, toggleFeaturedProduct } from "../controllers/productController.js";
 import { adminOnly, protect } from "../middleware/authMiddleware.js";
 import express from "express";
 const router = express.Router();

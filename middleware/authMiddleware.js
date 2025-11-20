@@ -1,10 +1,13 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/User.js";
+import User from "../models/User.js";
+
 
 export const protect = async (req, res, next) => {
   try {
-    // Step 1: Token read from cookies
+
     const accessToken = req.cookies.accessToken;
+    
+    
 
     if (!accessToken) {
       return res
@@ -14,7 +17,7 @@ export const protect = async (req, res, next) => {
 
     try {
       // Step 2: Verify token
-      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+      const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
 
       // Step 3: Find user
       const user = await User.findById(decoded.userId || decoded.id).select(
@@ -48,6 +51,8 @@ export const protect = async (req, res, next) => {
 
 export const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
+    console.log(req.user);
+    
     next();
   } else {
     return res.status(403).json({ message: "Access denied - Admin only" });
